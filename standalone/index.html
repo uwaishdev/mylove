@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>A Little Question For You ❤️</title>
+  <meta name="description" content="A romantic interactive proposal website created with love.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0d0d1a;
+      --card-bg: rgba(22, 16, 35, 0.75);
+      --neon-pink: #ff007f;
+      --neon-pink-hover: #e60073;
+      --neon-glow: rgba(255, 0, 127, 0.45);
+      --text-white: #ffffff;
+      --text-muted: #fce7f3;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-muted);
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+      padding: 20px;
+    }
+
+    /* Ambient Pulsing Heart Backdrop */
+    .bg-heart-glow {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 450px;
+      height: 450px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 0, 127, 0.18) 0%, rgba(13, 13, 26, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+      animation: heartPulse 2.4s infinite ease-in-out;
+    }
+
+    @keyframes heartPulse {
+      0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.6; }
+      15% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.9; }
+      30% { transform: translate(-50%, -50%) scale(1.0); opacity: 0.7; }
+      45% { transform: translate(-50%, -50%) scale(1.22); opacity: 1; }
+      70% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.6; }
+      100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.6; }
+    }
+
+    /* Floating Particles & Hearts */
+    .particle {
+      position: fixed;
+      bottom: -20px;
+      color: var(--neon-pink);
+      pointer-events: none;
+      z-index: 1;
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.7; }
+      80% { opacity: 0.5; }
+      100% { transform: translateY(-115vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Glassmorphism Card */
+    .card-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 520px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 0, 127, 0.3);
+      border-radius: 28px;
+      padding: 40px 30px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(255, 0, 127, 0.3), inset 0 0 15px rgba(255, 0, 127, 0.1);
+      transition: all 0.4s ease;
+    }
+
+    .card-top-rim {
+      position: absolute;
+      top: 0;
+      left: 20%;
+      right: 20%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon-pink), transparent);
+      box-shadow: 0 0 15px var(--neon-pink);
+    }
+
+    /* Screen Management: Only active screen is visible */
+    .screen {
+      display: none;
+      opacity: 0;
+      transform: scale(0.96);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .screen.active {
+      display: block;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Typography */
+    .cursive-heading {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--text-white);
+      text-shadow: 0 0 12px var(--neon-pink), 0 0 25px rgba(255, 0, 127, 0.5);
+      margin-bottom: 14px;
+      line-height: 1.25;
+    }
+
+    .romantic-text {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: rgba(255, 230, 242, 0.9);
+      font-weight: 300;
+      margin-bottom: 24px;
+    }
+
+    .question-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    .step-tag {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--neon-pink);
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: inline-block;
+    }
+
+    /* Form Inputs */
+    .input-field, .textarea-field {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 0, 127, 0.35);
+      border-radius: 16px;
+      padding: 14px 18px;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+      margin-bottom: 6px;
+    }
+
+    .textarea-field {
+      resize: none;
+    }
+
+    .input-field:focus, .textarea-field:focus {
+      border-color: var(--neon-pink);
+      box-shadow: 0 0 14px rgba(255, 0, 127, 0.5);
+    }
+
+    .input-field::placeholder, .textarea-field::placeholder {
+      color: rgba(255, 182, 218, 0.35);
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: var(--neon-pink);
+      color: #ffffff;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 34px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      cursor: pointer;
+      box-shadow: 0 0 25px var(--neon-glow);
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      background: var(--neon-pink-hover);
+      box-shadow: 0 0 35px rgba(255, 0, 127, 0.7);
+      transform: translateY(-2px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .btn-back {
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 220, 240, 0.85);
+      border: none;
+      border-radius: 50px;
+      padding: 12px 22px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-back:hover {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+    }
+
+    .nav-buttons-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 18px;
+      gap: 12px;
+    }
+
+    /* Icon badge */
+    .icon-badge {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgba(255, 0, 127, 0.12);
+      border: 1px solid rgba(255, 0, 127, 0.4);
+      box-shadow: 0 0 20px rgba(255, 0, 127, 0.25);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 2rem;
+    }
+
+    .pulse {
+      animation: heartbeat 2s infinite ease-in-out;
+    }
+
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      14% { transform: scale(1.15); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.2); }
+      70% { transform: scale(1); }
+    }
+
+    /* Error Message */
+    .error-msg {
+      color: #ff4d94;
+      font-size: 0.78rem;
+      margin-top: 6px;
+      display: none;
+    }
+
+    /* Sound Button */
+    .audio-btn {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      background: rgba(22, 16, 35, 0.8);
+      border: 1px solid rgba(255, 0, 127, 0.35);
+      color: #ff99cc;
+      border-radius: 50px;
+      padding: 8px 14px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Canvas for Confetti */
+    #confettiCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    @media (max-width: 480px) {
+      .card-container {
+        padding: 30px 20px;
+      }
+      .cursive-heading {
+        font-size: 2rem;
+      }
+      .btn-primary {
+        padding: 12px 26px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Heart Pulsing Glow -->
+  <div class="bg-heart-glow"></div>
+
+  <!-- Audio Toggle -->
+  <button id="audioToggleBtn" class="audio-btn" type="button">
+    <span>🎵</span> <span id="audioBtnText">Play Music</span>
+  </button>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- Floating Particles Container -->
+  <div id="particleContainer"></div>
+
+  <!-- Main Card -->
+  <main class="card-container">
+    <div class="card-top-rim"></div>
+
+    <!-- SCREEN 1: WELCOME -->
+    <section id="step1" class="screen active">
+      <div class="icon-badge pulse">❤️</div>
+      <h1 class="cursive-heading">Hey, <span class="gf-name">My Love</span> ✨</h1>
+      <p class="romantic-text" id="welcomeMsg">
+        Every single time I look at you, I find myself completely lost for words. You are one of the most beautiful parts of my life, and your smile makes even my ordinary days feel special.
+      </p>
+      <div>
+        <button type="button" id="openBtn" class="btn-primary">
+          <span>OPEN</span> <span>❤️</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 2: A LITTLE SURPRISE -->
+    <section id="step2" class="screen">
+      <div class="icon-badge">💗</div>
+      <h2 class="cursive-heading">For You... 💗</h2>
+      <p class="romantic-text" id="surpriseMsg">
+        I've been wanting to ask you a few things for a while. Sometimes, words get difficult when you're right in front of me, so I made this little space just for us. Ready for a few questions from my heart?
+      </p>
+      <div class="nav-buttons-row">
+        <button type="button" class="btn-back" onclick="showStep(1)">← Back</button>
+        <button type="button" class="btn-primary" onclick="showStep(3)">
+          <span>LET'S DO IT</span> <span>✨</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 3: QUESTION ONE -->
+    <section id="step3" class="screen">
+      <span class="step-tag">Question 01 of 04</span>
+      <h3 class="cursive-heading" style="font-size: 1.8rem;">A Special Memory 💭</h3>
+      <p class="question-title">"What is one special moment with me that always brings a smile to your face?"</p>
+      <textarea id="ansBestMemory" class="textarea-field" rows="3" placeholder="Tell me about that memory..."></textarea>
+      <p id="errStep3" class="error-msg">Please write a memory before moving forward ❤️</p>
+      <div class="nav-buttons-row">
+        <button type="button" class="btn-back" onclick="showStep(2)">← Back</button>
+        <button type="button" class="btn-primary" onclick="validateAndGo(3, 4)">
+          <span>NEXT</span> <span>→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 4: QUESTION TWO -->
+    <section id="step4" class="screen">
+      <span class="step-tag">Question 02 of 04</span>
+      <h3 class="cursive-heading" style="font-size: 1.8rem;">Our Getaway ✈️</h3>
+      <p class="question-title">"If we could escape from the world together for a weekend, where would you want us to go?"</p>
+      <textarea id="ansDreamDestination" class="textarea-field" rows="3" placeholder="Tell me our dream destination..."></textarea>
+      <p id="errStep4" class="error-msg">Please share our dream destination ✈️</p>
+      <div class="nav-buttons-row">
+        <button type="button" class="btn-back" onclick="showStep(3)">← Back</button>
+        <button type="button" class="btn-primary" onclick="validateAndGo(4, 5)">
+          <span>NEXT</span> <span>→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 5: QUESTION THREE -->
+    <section id="step5" class="screen">
+      <span class="step-tag">Question 03 of 04</span>
+      <h3 class="cursive-heading" style="font-size: 1.8rem;">Honest Confession 😄</h3>
+      <p class="question-title">"What is one of my annoying habits that you secretly find cute?"</p>
+      <textarea id="ansCuteHabit" class="textarea-field" rows="3" placeholder="Be honest with me 😄"></textarea>
+      <p id="errStep5" class="error-msg">Tell me that cute habit! 😄</p>
+      <div class="nav-buttons-row">
+        <button type="button" class="btn-back" onclick="showStep(4)">← Back</button>
+        <button type="button" class="btn-primary" onclick="validateAndGo(5, 6)">
+          <span>NEXT</span> <span>→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 6: QUESTION FOUR -->
+    <section id="step6" class="screen">
+      <span class="step-tag">Question 04 of 04</span>
+      <h3 class="cursive-heading" style="font-size: 1.8rem;">Our Song 🎶</h3>
+      <p class="question-title">"Which song reminds you of us whenever you hear it?"</p>
+      <input type="text" id="ansOurSong" class="input-field" placeholder="Our special song 🎶">
+      <p id="errStep6" class="error-msg">Please share our song 🎶</p>
+      <div class="nav-buttons-row">
+        <button type="button" class="btn-back" onclick="showStep(5)">← Back</button>
+        <button type="button" class="btn-primary" onclick="validateAndGo(6, 7)">
+          <span>NEXT</span> <span>→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 7: HER HEART'S MESSAGE -->
+    <section id="step7" class="screen">
+      <span class="step-tag">Final Step</span>
+      <h2 class="cursive-heading" style="font-size: 2rem;">One Last Thing, My Love 💌</h2>
+      <p class="question-title">"If there's anything you've wanted to tell me about us, your feelings, or your dreams, this is your space. Write whatever your heart wants."</p>
+      <textarea id="ansFinalMessage" class="textarea-field" rows="4" placeholder="Write your heart out... I'm listening ❤️"></textarea>
+      <p id="errStep7" class="error-msg">Please write a small note from your heart 💖</p>
+      <p style="font-size: 0.72rem; color: rgba(255, 200, 230, 0.6); margin-top: 8px;">
+        🔒 Private: Your words will be delivered directly to me.
+      </p>
+      <div class="nav-buttons-row">
+        <button type="button" class="btn-back" onclick="showStep(6)">← Back</button>
+        <button type="button" id="submitBtn" class="btn-primary">
+          <span>SEND TO ME</span> <span>💖</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SCREEN 8: THANK YOU -->
+    <section id="step8" class="screen">
+      <div class="icon-badge pulse">💖</div>
+      <h1 class="cursive-heading">Thank You, My Love! 🥹❤️</h1>
+      <p class="romantic-text" id="thankYouMsg">
+        Thank you for sharing a little piece of your heart with me. Every word matters to me, and I'm so lucky to have these memories with you.
+      </p>
+      <p class="cursive-heading" style="font-size: 1.6rem; color: #ffb3d9; margin-top: 15px;">
+        Forever & Always, <br><span id="yourNameSignature">Yours Forever</span> 🌹
+      </p>
+    </section>
+  </main>
+
+  <script>
+    /* =====================================================================
+       1. PERSONALIZATION CONFIGURATION (EDIT HERE)
+       ===================================================================== */
+    const GIRLFRIEND_NAME = "My Love";      // <-- Replace with your girlfriend's name
+    const YOUR_NAME = "Yours Forever";      // <-- Replace with your name
+    
+    // Paste your deployed Google Apps Script Web App URL below:
+    const GOOGLE_APPS_SCRIPT_WEB_APP_URL = ""; 
+
+    /* Update dynamic text in page */
+    document.querySelectorAll('.gf-name').forEach(el => el.textContent = GIRLFRIEND_NAME);
+    const sig = document.getElementById('yourNameSignature');
+    if (sig) sig.textContent = YOUR_NAME;
+
+    /* =====================================================================
+       2. NAVIGATION ENGINE (FIXES THE "OPEN" BUTTON & SCREEN SWITCHING)
+       ===================================================================== */
+    function showStep(stepNum) {
+      // Hide all screens
+      for (let i = 1; i <= 8; i++) {
+        const screen = document.getElementById('step' + i);
+        if (screen) {
+          screen.classList.remove('active');
+        }
+      }
+
+      // Show target screen
+      const targetScreen = document.getElementById('step' + stepNum);
+      if (targetScreen) {
+        targetScreen.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Trigger sparkle sound
+      playSparkle();
+    }
+
+    // Attach reliable OPEN button click event on first click
+    const openBtn = document.getElementById('openBtn');
+    if (openBtn) {
+      openBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        showStep(2);
+      });
+    }
+
+    /* Validation for next step */
+    function validateAndGo(current, next) {
+      let isValid = true;
+      let inputEl = null;
+      let errEl = document.getElementById('errStep' + current);
+
+      if (current === 3) inputEl = document.getElementById('ansBestMemory');
+      if (current === 4) inputEl = document.getElementById('ansDreamDestination');
+      if (current === 5) inputEl = document.getElementById('ansCuteHabit');
+      if (current === 6) inputEl = document.getElementById('ansOurSong');
+
+      if (inputEl && inputEl.value.trim() === '') {
+        isValid = false;
+        if (errEl) errEl.style.display = 'block';
+      } else {
+        if (errEl) errEl.style.display = 'none';
+      }
+
+      if (isValid) {
+        showStep(next);
+      }
+    }
+
+    /* =====================================================================
+       3. FINAL SUBMISSION & GOOGLE SHEETS / SERVER INTEGRATION
+       ===================================================================== */
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn) {
+      submitBtn.addEventListener('click', async function () {
+        const finalMsgInput = document.getElementById('ansFinalMessage');
+        const errStep7 = document.getElementById('errStep7');
+
+        if (!finalMsgInput || finalMsgInput.value.trim() === '') {
+          if (errStep7) errStep7.style.display = 'block';
+          return;
+        }
+        if (errStep7) errStep7.style.display = 'none';
+
+        // Prepare data
+        const payload = {
+          submissionId: 'PROP-' + Date.now().toString(36).toUpperCase(),
+          submissionDate: new Date().toLocaleString(),
+          girlfriendName: GIRLFRIEND_NAME,
+          bestMemory: document.getElementById('ansBestMemory').value.trim(),
+          dreamDestination: document.getElementById('ansDreamDestination').value.trim(),
+          cuteHabit: document.getElementById('ansCuteHabit').value.trim(),
+          ourSong: document.getElementById('ansOurSong').value.trim(),
+          finalMessage: finalMsgInput.value.trim(),
+          status: 'Submitted with Love ❤️'
+        };
+
+        // Loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Delivering...</span> <span>💖</span>';
+
+        // 1. Save to browser backup
+        try {
+          const list = JSON.parse(localStorage.getItem('saved_responses') || '[]');
+          list.push(payload);
+          localStorage.setItem('saved_responses', JSON.stringify(list));
+        } catch (e) {}
+
+        // 2. Post to Google Sheets Web App if URL is configured
+        if (GOOGLE_APPS_SCRIPT_WEB_APP_URL && GOOGLE_APPS_SCRIPT_WEB_APP_URL.startsWith('http')) {
+          try {
+            await fetch(GOOGLE_APPS_SCRIPT_WEB_APP_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+              mode: 'no-cors' // Google Apps Script redirects require no-cors in browser
+            });
+          } catch (err) {
+            console.warn('Apps Script forward note:', err);
+          }
+        }
+
+        // Show celebration screen
+        showStep(8);
+        startConfetti();
+      });
+    }
+
+    /* =====================================================================
+       4. AMBIENT ROMANTIC SOUND SYNTHESIZER (NO EXTERNAL FILES)
+       ===================================================================== */
+    let audioCtx = null;
+    let isPlaying = false;
+    let soundInterval = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playNote(freq, delay, dur) {
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime + delay;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now);
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.linearRampToValueAtTime(0.12, now + 0.1);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(now);
+      osc.stop(now + dur + 0.1);
+    }
+
+    function playSparkle() {
+      try {
+        initAudio();
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+          playNote(freq, idx * 0.05, 0.4);
+        });
+      } catch (e) {}
+    }
+
+    const chords = [
+      [261.63, 329.63, 392.00, 493.88], // Cmaj7
+      [220.00, 261.63, 329.63, 392.00], // Am7
+      [174.61, 261.63, 329.63, 349.23], // Fmaj7
+      [196.00, 246.94, 293.66, 392.00]  // Gmaj
+    ];
+    let chordIdx = 0;
+
+    function toggleMusic() {
+      initAudio();
+      const btnText = document.getElementById('audioBtnText');
+      if (isPlaying) {
+        isPlaying = false;
+        clearInterval(soundInterval);
+        if (btnText) btnText.textContent = 'Play Music';
+      } else {
+        isPlaying = true;
+        if (btnText) btnText.textContent = 'Mute';
+        const playChord = () => {
+          const notes = chords[chordIdx];
+          notes.forEach((freq, idx) => {
+            playNote(freq, idx * 0.3, 2.5);
+          });
+          chordIdx = (chordIdx + 1) % chords.length;
+        };
+        playChord();
+        soundInterval = setInterval(playChord, 3000);
+      }
+    }
+
+    const audioToggleBtn = document.getElementById('audioToggleBtn');
+    if (audioToggleBtn) {
+      audioToggleBtn.addEventListener('click', toggleMusic);
+    }
+
+    /* =====================================================================
+       5. FLOATING PARTICLES & CELEBRATION CONFETTI
+       ===================================================================== */
+    const container = document.getElementById('particleContainer');
+    if (container) {
+      for (let i = 0; i < 15; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.innerHTML = i % 2 === 0 ? '❤️' : '✨';
+        p.style.left = (Math.random() * 95) + '%';
+        p.style.animationDuration = (8 + Math.random() * 8) + 's';
+        p.style.animationDelay = (Math.random() * 6) + 's';
+        p.style.fontSize = (12 + Math.random() * 12) + 'px';
+        container.appendChild(p);
+      }
+    }
+
+    function startConfetti() {
+      const canvas = document.getElementById('confettiCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#ff007f', '#ff4d94', '#ff80bf', '#ffd1dc', '#ffffff', '#ffd700'];
+
+      for (let i = 0; i < 60; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * -canvas.height * 0.5,
+          vx: (Math.random() - 0.5) * 4,
+          vy: Math.random() * 3 + 2,
+          size: Math.random() * 8 + 5,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * Math.PI * 2
+        });
+      }
+
+      function loop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rotation);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+          ctx.restore();
+          if (p.y > canvas.height) {
+            p.y = -10;
+            p.x = Math.random() * canvas.width;
+          }
+        });
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }
+  </script>
+</body>
+</html>

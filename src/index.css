@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-dark: #0d0d1a;
+    --neon-pink: #ff007f;
+    --neon-pink-soft: rgba(255, 0, 127, 0.4);
+    --neon-pink-subtle: rgba(255, 0, 127, 0.15);
+  }
+
+  body {
+    background-color: #0d0d1a;
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #fdf2f8;
+    overflow-x: hidden;
+  }
+}
+
+.font-dancing {
+  font-family: 'Dancing Script', cursive, -apple-system, sans-serif;
+}
+
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Neon Glows */
+.neon-glow-box {
+  box-shadow: 0 0 20px rgba(255, 0, 127, 0.35), 0 0 40px rgba(255, 0, 127, 0.15);
+}
+
+.neon-glow-box-strong {
+  box-shadow: 0 0 30px rgba(255, 0, 127, 0.6), 0 0 60px rgba(255, 0, 127, 0.3), inset 0 0 15px rgba(255, 0, 127, 0.2);
+}
+
+.neon-glow-text {
+  text-shadow: 0 0 10px rgba(255, 0, 127, 0.7), 0 0 25px rgba(255, 0, 127, 0.4);
+}
+
+.neon-glow-text-subtle {
+  text-shadow: 0 0 8px rgba(255, 0, 127, 0.4);
+}
+
+/* Glassmorphism Card */
+.glass-card {
+  background: rgba(22, 16, 35, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 0, 127, 0.28);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-hover:hover {
+  border-color: rgba(255, 0, 127, 0.6);
+  box-shadow: 0 0 25px rgba(255, 0, 127, 0.3);
+}
+
+/* Heartbeat animation */
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.12);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.18);
+  }
+  70% {
+    transform: scale(1);
+  }
+}
+
+.animate-heartbeat {
+  animation: heartbeat 2.2s infinite ease-in-out;
+}
+
+.animate-heartbeat-fast {
+  animation: heartbeat 1.2s infinite ease-in-out;
+}
+
+/* Floating particles */
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(0.8) rotate(0deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-110vh) scale(1.2) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.floating-particle {
+  position: absolute;
+  pointer-events: none;
+  animation: floatUp 14s infinite linear;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0d1a;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 0, 127, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 0, 127, 0.6);
+}

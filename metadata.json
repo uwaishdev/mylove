@@ -1,0 +1,6 @@
+{
+  "name": "Romantic Proposal & Love Journey",
+  "description": "A premium, neon-glowing romantic interactive proposal experience with multi-step questions, response submission, and secure admin dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
